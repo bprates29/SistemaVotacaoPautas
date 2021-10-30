@@ -1,6 +1,7 @@
 package br.com.sicredi.desafiopauta.entity;
 
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,6 +19,7 @@ public class Pauta {
     private Long id;
     private String titulo;
     private int tempo;
+    private Boolean aberta = false;
     @OneToMany(mappedBy="pauta")
     private Set<Voto> votos;
 }

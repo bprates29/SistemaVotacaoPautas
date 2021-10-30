@@ -6,13 +6,21 @@ import br.com.sicredi.desafiopauta.mappers.PautaMapper;
 import br.com.sicredi.desafiopauta.mappers.PautaMapper;
 import br.com.sicredi.desafiopauta.repository.PautaRepository;
 import br.com.sicredi.desafiopauta.repository.PautaRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Timer;
 
 @Service
 public class PautaService {
+
+    private static Logger Logger = LoggerFactory.getLogger(PautaService.class);
+    private static DateTimeFormatter Dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
     
     @Autowired
     PautaRepository pautaRepository;
@@ -43,5 +51,19 @@ public class PautaService {
         Pauta pauta = pautaRepository.getById(id);
         pautaRepository.delete(pauta);
         return pautaMapper.PautaToPautaDto(pauta);
+    }
+
+    public void iniciarVotacao(PautaDto pautaDto) {
+        Logger.info(String.format("Iniciando a votação da pauta %s, inicio: %s", pautaDto.getTitulo(),Dtf.format(LocalDateTime.now())));
+        Pauta pauta = pautaRepository.findById(pautaDto.getId()).orElseThrow();
+        pauta.setAberta(true);
+        pautaRepository.save(pauta);
+    }
+
+    public void finalizaVotacao(PautaDto pautaDto) {
+        Pauta pauta = pautaRepository.findById(pautaDto.getId()).orElseThrow();
+        pauta.setAberta(false);
+        pautaRepository.save(pauta);
+        Logger.info(String.format("Votação pauta: %s, término: %s", pautaDto.getTitulo(),Dtf.format(LocalDateTime.now())));
     }
 }

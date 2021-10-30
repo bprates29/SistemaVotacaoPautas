@@ -66,4 +66,16 @@ public class PautaService {
         pautaRepository.save(pauta);
         Logger.info(String.format("Votação pauta: %s, término: %s", pautaDto.getTitulo(),Dtf.format(LocalDateTime.now())));
     }
+    
+    public boolean getSeVotacaoEstaAbertaById (Long pautaId) {
+        return pautaRepository.findById(pautaId).orElseThrow().getAberta();
+    }
+
+    public boolean associadoJaVotouNaPauta(Long associadoId, Long pautaId) {
+        /*return pautaRepository.findById(pautaId).orElseThrow()
+                .getVotos()
+                .parallelStream()
+                .anyMatch(voto -> voto.getAssociado().getId().equals(associadoId));*/
+        return false;
+    }
 }

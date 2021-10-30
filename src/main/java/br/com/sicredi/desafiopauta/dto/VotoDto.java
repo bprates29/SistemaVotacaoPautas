@@ -2,10 +2,13 @@ package br.com.sicredi.desafiopauta.dto;
 
 import lombok.Data;
 
-@Data
-public class VotoDto {
+import java.io.Serializable;
 
+@Data
+public class VotoDto implements Serializable {
     private Long id;
-    private boolean voto;
+    private Long pautaId;
+    private Long associadoId;
+    private String voto;
     
 }

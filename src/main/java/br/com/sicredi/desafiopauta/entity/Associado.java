@@ -22,6 +22,4 @@ public class Associado {
     @Column(unique = true)
     private String cpf;
     private String nome;
-    @OneToMany(mappedBy="associado")
-    private Set<Voto> votos;
 }

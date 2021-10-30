@@ -1,7 +1,9 @@
 package br.com.sicredi.desafiopauta.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,11 +21,9 @@ public class Voto {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @ManyToOne
-    @JoinColumn(name="pauta_id", nullable=false)
-    private Pauta pauta;
-    @ManyToOne
-    @JoinColumn(name="associado_id", nullable=false)
-    private Associado associado;
+    @Column(name = "pauta_id")
+    private Long pautaId;
+    @Column(name = "associado_id")
+    private Long associadoId;
     private boolean voto;
 }

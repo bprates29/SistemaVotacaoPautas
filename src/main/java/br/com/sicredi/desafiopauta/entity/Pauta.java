@@ -20,6 +20,4 @@ public class Pauta {
     private String titulo;
     private int tempo;
     private Boolean aberta = false;
-    @OneToMany(mappedBy="pauta")
-    private Set<Voto> votos;
 }

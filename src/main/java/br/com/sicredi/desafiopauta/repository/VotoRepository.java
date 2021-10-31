@@ -13,4 +13,6 @@ import java.util.List;
 public interface VotoRepository extends JpaRepository<Voto,Long> {
 
     List<Voto> findByAssociadoIdAndPautaId(Long associado_id, Long pauta_id);
+
+    List<Voto> findAllByPautaId(Long pauta_id);
 }

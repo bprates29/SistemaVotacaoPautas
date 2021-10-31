@@ -1,6 +1,8 @@
 package br.com.sicredi.desafiopauta.dto;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -13,6 +15,9 @@ public class AssociadoDto {
     @NotBlank(message = "Nome é obrigatório")
     private String nome;
     @NotBlank(message = "CPF é obrigatório")
-    private String cpf;
-    
+    @Setter(AccessLevel.NONE) private String cpf;
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf.replaceAll("[-+.^:,]", "");
+    }
 }

@@ -22,6 +22,17 @@ public class ControllerExceptionHandler {
         return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(NotAllowedException.class)
+    public ResponseEntity<Error> notAllowedExceptionException(NotAllowedException ex, WebRequest request) {
+        Error message = new Error(
+                HttpStatus.NOT_ACCEPTABLE.value(),
+                new Date(),
+                ex.getMessage(),
+                request.getDescription(false));
+
+        return new ResponseEntity<>(message, HttpStatus.NOT_ACCEPTABLE);
+    }
+
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<Error> resourceBadRequestException(BadRequestException ex, WebRequest request) {
         Error message = new Error(

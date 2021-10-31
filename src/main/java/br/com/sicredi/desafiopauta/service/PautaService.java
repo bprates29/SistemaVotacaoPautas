@@ -1,5 +1,6 @@
 package br.com.sicredi.desafiopauta.service;
 
+import br.com.sicredi.desafiopauta.dto.PautaComVotosDto;
 import br.com.sicredi.desafiopauta.dto.PautaDto;
 import br.com.sicredi.desafiopauta.entity.Pauta;
 import br.com.sicredi.desafiopauta.mappers.PautaMapper;
@@ -24,6 +25,9 @@ public class PautaService {
     
     @Autowired
     PautaRepository pautaRepository;
+
+    @Autowired
+    VotoService votoService;
     
     @Autowired
     PautaMapper pautaMapper;
@@ -71,11 +75,11 @@ public class PautaService {
         return pautaRepository.findById(pautaId).orElseThrow().getAberta();
     }
 
-    public boolean associadoJaVotouNaPauta(Long associadoId, Long pautaId) {
-        /*return pautaRepository.findById(pautaId).orElseThrow()
-                .getVotos()
-                .parallelStream()
-                .anyMatch(voto -> voto.getAssociado().getId().equals(associadoId));*/
-        return false;
+    public PautaComVotosDto getVotosByPautaId(Long pautaId) {
+        return new PautaComVotosDto(
+                pautaMapper.PautaToPautaDto(pautaRepository.getById(pautaId)),
+                votoService.getTotalVotosPorPautaId(pautaId),
+                votoService.getTotalVotosSimPorPautaId(pautaId),
+                votoService.getTotalVotosNaoPorPautaId(pautaId));
     }
 }

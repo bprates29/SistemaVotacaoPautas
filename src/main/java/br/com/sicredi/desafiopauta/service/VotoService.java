@@ -2,6 +2,7 @@ package br.com.sicredi.desafiopauta.service;
 
 import br.com.sicredi.desafiopauta.dto.PautaDto;
 import br.com.sicredi.desafiopauta.dto.VotoDto;
+import br.com.sicredi.desafiopauta.entity.Voto;
 import br.com.sicredi.desafiopauta.mappers.VotoMapper;
 import br.com.sicredi.desafiopauta.repository.VotoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,7 @@ public class VotoService {
         TimerTask finalizar = new TimerTask() {
             public void run() {
                 pautaService.finalizaVotacao(pautaDto);
+                rabbitMQService.sendMessageFinalizaVotosPauta(pautaService.getVotosByPautaId(pautaDto.getId()));
             }
         };
         Timer timer = new Timer("Timer");
@@ -58,17 +60,32 @@ public class VotoService {
                 .defaultIfEmpty("Votação encerrada ou você já votou nessa pauta!");
     }
     
-    private boolean associadoNaoVotouNaPauta (Long associadoId, Long pautaId) {
-        return votoRepository.findByAssociadoIdAndPautaId(associadoId,pautaId).isEmpty();
-    } 
-
     public void salvarVotoNoBanco(VotoDto votoDto) {
         votoRepository.save(votoMapper.votoDtoToVoto(votoDto));
     }
 
-    private void publishEvent(VotoDto votoDto) {
-        rabbitMQService.sendMessage(votoDto);
+    public Integer getTotalVotosPorPautaId(Long pautaId) {
+        return votoRepository.findAllByPautaId(pautaId).size();
     }
 
-    
+    public Integer getTotalVotosSimPorPautaId(Long pautaId) {
+        return (int) votoRepository.findAllByPautaId(pautaId)
+                .stream()
+                .filter(Voto::isVoto)
+                .count();
+    }
+    public Integer getTotalVotosNaoPorPautaId(Long pautaId) {
+        return (int) votoRepository.findAllByPautaId(pautaId)
+                .stream()
+                .filter(voto -> !voto.isVoto())
+                .count();
+    }
+
+    private void publishEvent(VotoDto votoDto) {
+        rabbitMQService.sendMessageVoteAssociado(votoDto);
+    }
+
+    private boolean associadoNaoVotouNaPauta (Long associadoId, Long pautaId) {
+        return votoRepository.findByAssociadoIdAndPautaId(associadoId,pautaId).isEmpty();
+    }
 }

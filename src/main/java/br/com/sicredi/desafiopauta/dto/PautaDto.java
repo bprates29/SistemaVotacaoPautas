@@ -1,11 +1,13 @@
 package br.com.sicredi.desafiopauta.dto;
 
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.validation.constraints.NotBlank;
 
 @Data
+@Builder
 public class PautaDto {
 
     public static final int TEMPO_PADRAO = 60;
@@ -14,5 +16,6 @@ public class PautaDto {
     @NotBlank(message = "Um título para a pauta é obrigatório")
     private String titulo;
     private int tempo = TEMPO_PADRAO; //em segundos
+    
     
 }

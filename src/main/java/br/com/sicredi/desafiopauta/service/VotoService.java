@@ -36,19 +36,6 @@ public class VotoService {
         return "Votação iniciada, será finalizada em " + pautaDto.getTempo() + " segundos";
     }
 
-    private void iniciarEFinalizarVotacao(PautaDto pautaDto) {
-        TimerTask finalizar = new TimerTask() {
-            public void run() {
-                pautaService.finalizaVotacao(pautaDto);
-                rabbitMQService.sendMessageFinalizaVotosPauta(pautaService.getVotosByPautaId(pautaDto.getId()));
-            }
-        };
-        Timer timer = new Timer("Timer");
-        long tempoDuracao = pautaDto.getTempo() * 1000L;
-        pautaService.iniciarVotacao(pautaDto);
-        timer.schedule(finalizar, tempoDuracao);
-    }
-    
     public Flux<String> salvarVotoNaFila(VotoDto votoDto) {
         return Flux.just(votoDto)
                 .filter(votoDto1 -> pautaService.getSeVotacaoEstaAbertaById(votoDto1.getPautaId()) &&
@@ -59,7 +46,7 @@ public class VotoService {
                 })
                 .defaultIfEmpty("Votação encerrada ou você já votou nessa pauta!");
     }
-    
+
     public void salvarVotoNoBanco(VotoDto votoDto) {
         votoRepository.save(votoMapper.votoDtoToVoto(votoDto));
     }
@@ -74,18 +61,31 @@ public class VotoService {
                 .filter(Voto::isVoto)
                 .count();
     }
+
     public Integer getTotalVotosNaoPorPautaId(Long pautaId) {
         return (int) votoRepository.findAllByPautaId(pautaId)
                 .stream()
                 .filter(voto -> !voto.isVoto())
                 .count();
     }
-
     private void publishEvent(VotoDto votoDto) {
         rabbitMQService.sendMessageVoteAssociado(votoDto);
     }
 
     private boolean associadoNaoVotouNaPauta (Long associadoId, Long pautaId) {
         return votoRepository.findByAssociadoIdAndPautaId(associadoId,pautaId).isEmpty();
+    }
+
+    private void iniciarEFinalizarVotacao(PautaDto pautaDto) {
+        TimerTask finalizar = new TimerTask() {
+            public void run() {
+                pautaService.finalizaVotacao(pautaDto);
+                rabbitMQService.sendMessageFinalizaVotosPauta(pautaService.getVotosByPautaId(pautaDto.getId()));
+            }
+        };
+        Timer timer = new Timer("Timer");
+        long tempoDuracao = pautaDto.getTempo() * 1000L;
+        pautaService.iniciarVotacao(pautaDto);
+        timer.schedule(finalizar, tempoDuracao);
     }
 }

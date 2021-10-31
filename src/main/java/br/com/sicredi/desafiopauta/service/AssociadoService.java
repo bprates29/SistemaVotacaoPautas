@@ -60,4 +60,8 @@ public class AssociadoService {
         associadoRepository.delete(associado);
         return associadoMapper.AssociadoToAssociadoDto(associado);
     }
+
+    public Boolean associadoExiste(Long id) {
+        return associadoRepository.existsById(id);
+    }
 }

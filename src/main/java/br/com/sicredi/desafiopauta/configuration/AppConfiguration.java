@@ -17,10 +17,19 @@ public class AppConfiguration {
 
 	@Value("${associado.vote.event.queue}")
 	private String ASSOCIADO_VOTE_EVENT_MESSAGE_QUEUE;
+	
+	@Value("${finaliza.vote.pauta.event.queue}")
+	private String FINALIZA_VOTE_EVENT_MESSAGE_QUEUE;
+	
 
 	@Bean
 	Queue queue() {
 		return new Queue(ASSOCIADO_VOTE_EVENT_MESSAGE_QUEUE, false);
+	}
+
+	@Bean
+	Queue queueFinaliza() {
+		return new Queue(FINALIZA_VOTE_EVENT_MESSAGE_QUEUE, false);
 	}
 
 	@Bean
@@ -31,6 +40,11 @@ public class AppConfiguration {
 	@Bean
 	Binding binding(Queue queue, TopicExchange exchange) {
 		return BindingBuilder.bind(queue).to(exchange).with(ASSOCIADO_VOTE_EVENT_MESSAGE_QUEUE);
+	}
+
+	@Bean
+	Binding bindingFinaliza(Queue queueFinaliza, TopicExchange exchange) {
+		return BindingBuilder.bind(queueFinaliza).to(exchange).with(FINALIZA_VOTE_EVENT_MESSAGE_QUEUE);
 	}
 
 	@Bean

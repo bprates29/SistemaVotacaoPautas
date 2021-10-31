@@ -1,16 +1,13 @@
 package br.com.sicredi.desafiopauta.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-import javax.validation.constraints.NotBlank;
-import java.math.BigDecimal;
+import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
-public class PautaComVotosDto {
+public class PautaComVotosDto implements Serializable {
     
     private PautaDto pautaDto;
     private Integer totalDeVotos;

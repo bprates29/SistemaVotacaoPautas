@@ -28,14 +28,14 @@ public class VotoController {
     @Autowired
     PautaService pautaService;
 
-    @PatchMapping("abrir/pautaid/{id}")
+    @PatchMapping(value = "abrir/pautaid/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> abrirPautaVotacao (@PathVariable("id") Long id) {
         return new ResponseEntity<>(votoService.abrirVotacao(id), HttpStatus.OK);
     }
 
     @PatchMapping(value = "/associado", produces = MediaType.APPLICATION_JSON_VALUE)
-    Flux<String> streamMovieEvents(@Valid @RequestBody VotoDto votoDto){
-        return votoService.salvarVotoNaFila(votoDto);
+    ResponseEntity<Flux<String>> streamMovieEvents(@Valid @RequestBody VotoDto votoDto){
+        return new ResponseEntity<>(votoService.salvarVotoNaFila(votoDto), HttpStatus.OK);
     }
 
     @GetMapping("consultar/pautaid/{id}")

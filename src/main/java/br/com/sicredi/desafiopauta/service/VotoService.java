@@ -39,7 +39,8 @@ public class VotoService {
     public Flux<String> salvarVotoNaFila(VotoDto votoDto) {
         return Flux.just(votoDto)
                 .filter(votoDto1 -> pautaService.getSeVotacaoEstaAbertaById(votoDto1.getPautaId()) &&
-                        this.associadoNaoVotouNaPauta(votoDto1.getAssociadoId(),votoDto1.getPautaId()))
+                        this.associadoNaoVotouNaPauta(votoDto1.getAssociadoId(),votoDto1.getPautaId()) &&
+                        associadoService.associadoExiste(votoDto1.getAssociadoId()))
                 .flatMap(votoDto1 -> {
                     publishEvent(votoDto1);
                     return Flux.just("Voto computado!");

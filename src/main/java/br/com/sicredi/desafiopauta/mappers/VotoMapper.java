@@ -7,7 +7,6 @@ import br.com.sicredi.desafiopauta.entity.Voto;
 import br.com.sicredi.desafiopauta.repository.AssociadoRepository;
 import br.com.sicredi.desafiopauta.repository.PautaRepository;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper(componentModel="spring")

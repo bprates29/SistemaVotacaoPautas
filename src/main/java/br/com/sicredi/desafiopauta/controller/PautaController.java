@@ -46,7 +46,7 @@ public class PautaController {
         return new ResponseEntity<String>(HttpStatus.NO_CONTENT);
     }
     
-    @DeleteMapping() 
+    @DeleteMapping("/{id}") 
     public ResponseEntity<PautaDto> delete (@PathVariable("id") Long id){
         return new ResponseEntity<>(pautaService.deletePauta(id), HttpStatus.OK);
     }

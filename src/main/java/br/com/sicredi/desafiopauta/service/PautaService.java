@@ -4,8 +4,6 @@ import br.com.sicredi.desafiopauta.dto.PautaComVotosDto;
 import br.com.sicredi.desafiopauta.dto.PautaDto;
 import br.com.sicredi.desafiopauta.entity.Pauta;
 import br.com.sicredi.desafiopauta.mappers.PautaMapper;
-import br.com.sicredi.desafiopauta.mappers.PautaMapper;
-import br.com.sicredi.desafiopauta.repository.PautaRepository;
 import br.com.sicredi.desafiopauta.repository.PautaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Timer;
 
 @Service
 public class PautaService {
@@ -48,7 +45,8 @@ public class PautaService {
 
     public void updatePauta(Long id, PautaDto pautaDto) {
         pautaDto.setId(id);
-        pautaRepository.save(pautaMapper.PautaDtoToPauta(pautaDto));
+        Pauta pauta = pautaMapper.PautaDtoToPauta(pautaDto);
+        pautaRepository.save(pauta);
     }
 
     public PautaDto deletePauta(Long id) {

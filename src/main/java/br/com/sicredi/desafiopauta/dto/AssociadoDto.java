@@ -5,12 +5,10 @@ import lombok.Data;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 @Data
 public class AssociadoDto {
-    
+
     private Long id;
     @NotBlank(message = "Nome é obrigatório")
     private String nome;

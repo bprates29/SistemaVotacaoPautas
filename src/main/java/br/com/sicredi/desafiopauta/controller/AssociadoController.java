@@ -1,13 +1,10 @@
 package br.com.sicredi.desafiopauta.controller;
 
 import br.com.sicredi.desafiopauta.dto.AssociadoDto;
-import br.com.sicredi.desafiopauta.entity.Associado;
-import br.com.sicredi.desafiopauta.repository.AssociadoRepository;
 import br.com.sicredi.desafiopauta.service.AssociadoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,7 +46,7 @@ public class AssociadoController {
         return new ResponseEntity<String>(HttpStatus.NO_CONTENT);
     }
     
-    @DeleteMapping() 
+    @DeleteMapping("/{id}") 
     public ResponseEntity<AssociadoDto> delete (@PathVariable("id") Long id){
         return new ResponseEntity<>(associadoService.deleteAssociado(id), HttpStatus.OK);
     }
